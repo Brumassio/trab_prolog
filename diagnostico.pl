@@ -1,6 +1,5 @@
-#  Doença 1: Gripe
 sintoma(gripe, febre).
-sintoma(gripe, tosse_seca).
+sintoma(gripe, tosse).
 sintoma(gripe, dor_de_cabeça).
 sintoma(gripe, dores_no_corpo).
 probabilidade(gripe, 0.6).
@@ -72,10 +71,11 @@ sintomas_da_doenca(Doenca, Sintomas) :-
     findall(Sintoma, sintoma(Doenca, Sintoma), Sintomas).
 
 minha_lista(lista).
+
 grau_febre(resposta2) :-
-    write("\nSua temperatura esta ate 38 graus ou acima de 39 (responda com 38 ou 39)")
-    read(resposta2)
-    (resposta == 38 -> resposta2 = febre_baixa; resposta2 = febre_alta).    
+    write("\nSua temperatura esta ate 38 graus ou acima de 39 (responda com 38 ou 39)"),
+    read(resposta2),
+    (resposta2 == 38 -> resposta2 = febre_baixa; resposta2 = febre_alta).    
     
 pergunta_febre(RespostaF) :-
     write("\nEsta sentindo febre? (sim ou nao)"),
@@ -83,14 +83,19 @@ pergunta_febre(RespostaF) :-
     (resposta == sim -> grau_febre(resposta2), RespostaF = resposta2; RespostaF =  sem_febre). 
 
 grau_tosse(resposta2) :-
-    write("\ntosse com catarro ou sem (responda com ou sem)")
-    read(resposta2)
-    (resposta == com -> resposta2 = tosse_com_catarro; resposta2 = tosse_sem_catarro).    
+    write("\ntosse com catarro ou sem (responda com ou sem)"),
+    read(resposta2),
+    (resposta2 == com -> resposta2 = tosse_com_catarro; resposta2 = tosse_sem_catarro).    
     
 pergunta_tosse(RespostaT) :-
     write("\nEsta com tosse? (sim ou nao)"),
     read(resposta),
-    (resposta == sim -> grau_tosse(resposta2), RespostaT = resposta2; RespostaT =  sem_tosse). 
+    (resposta == sim -> grau_tosse(resposta2), RespostaT = resposta2; RespostaT =  sem_tosse).
+
+pergunta_dores_no_corpo(RespostaDNC) :-
+    write("\nEsta sentindo dores no corpo? (sim ou nao)"),
+    read(resposta),
+    (resposta == sim -> RespostaDNC = dores_no_corpo; RespostaDNC = sem_dores_no_corpo ).
 
 pergunta_dor_cabeca(RespostaDC) :-
     write("\nEsta sentindo dor de cabeca? (sim ou nao)"),
@@ -102,6 +107,11 @@ pergunta_dor_garganta(RespostaDG) :-
     read(resposta),
     (resposta == sim -> RespostaDG = dor_de_garganta; RespostaDG = sem_dor_de_garganta ).
 
+pergunta_nariz_entupido(RespostaNE) :-
+    write("\nEsta com o nariz entupido? (sim ou nao)"),
+    read(resposta),
+    (resposta == sim -> RespostaNE = nariz_entupido; RespostaNE = sem_nariz_entupido ).
+
 pergunta_coriza(RespostaC) :-
     write("\nEsta com coriza? (sim ou nao)"),
     read(resposta),
@@ -112,13 +122,23 @@ pergunta_dor_no_peito(RespostaDP) :-
     read(resposta),
     (resposta == sim -> RespostaDP = dor_no_peito; RespostaDP = sem_dor_no_peito ).
 
+pergunta_chiado_no_peito(RespostaCNP) :-
+    write("\nEsta com chiado no peito? (sim ou nao)"),
+    read(resposta),
+    (resposta == sim -> RespostaCNP = chiado_no_peito; RespostaCNP = sem_chiado_no_peito ).
+
+pergunta_falta_de_ar(RespostaFDA) :-
+    write("\nEsta falta de ar? (sim ou nao)"),
+    read(resposta),
+    (resposta == sim -> RespostaFDA = falta_de_ar; RespostaFDA = sem_falta_de_ar ).
+
 pergunta_dor_nas_articulacoes(RespostaDNA) :-
-    write("\nEsta com dor no peito? (sim ou nao)"),
+    write("\nEsta com dor nas articulações? (sim ou nao)"),
     read(resposta),
     (resposta == sim -> RespostaDNA = dor_nas_articulações; RespostaDNA = sem_dor_nas_articulações).
 
 pergunta_tontura(RespostaTon) :-
-    write("\nEsta com dor no peito? (sim ou nao)"),
+    write("\nEsta com tontura? (sim ou nao)"),
     read(resposta),
     (resposta == sim -> RespostaTon = tontura; RespostaTon = sem_tontura). 
 
@@ -131,6 +151,11 @@ pergunta_vermelhidão_na_pele(RespostaVNP) :-
     write("\nEsta com vermelhidão na pele? (sim ou nao)"),
     read(resposta),
     (resposta == sim -> RespostaVNP = vermelhidão_na_pele; RespostaVNP = sem_vermelhidão_na_pele). 
+
+pergunta_coceira(RespostaCoceira) :-
+    write("\nEsta com coceira? (sim ou nao)"),
+    read(resposta),
+    (resposta == sim -> RespostaCoceira = coceira; RespostaCoceira = sem_coceira). 
 
 pergunta_visão_embasada(RespostaVisao) :-
     write("\nEsta com a visao embasada? (sim ou nao)"),
@@ -147,10 +172,45 @@ pergunta_sede_excessiva(RespostaSede) :-
     read(resposta),
     (resposta == sim -> RespostaSede = sede_excessiva; RespostaSede = sem_sede_excessiva). 
 
+pergunta_manchas_na_pele(RespostaManchas) :-
+    write("\nEsta com manchas na pele ?"),
+    read(resposta),
+    (resposta == sim -> RespostaManchas = manchas_na_pele; RespostaManchas = sem_manchas_na_pele). 
+
+pergunta_respiração_rápida(RespostaRespira) :-
+    write("\nEsta com a respiracao rapida ?"),
+    read(resposta),
+    (resposta == sim -> RespostaRespira = respiração_rápida; RespostaRespira = sem_respiração_rápida). 
+
+pergunta_perda_de_peso(RespostaPeso) :-
+    write("\nPercebeu uma perda de peso repentina ?"),
+    read(resposta),
+    (resposta == sim -> RespostaPeso = perda_de_peso; RespostaPeso = sem_perda_de_peso). 
+
 questionario(lista) :-
     write('Responda as seguintes perguntas: '),
     pergunta_febre(RespostaF),
     pergunta_dor_cabeca(RespostaDC),
     pergunta_dor_garganta(RespostaDG),
+    pergunta_nariz_entupido(RespostaNE),
+    pergunta_tosse(RespostaT),
+    pergunta_coriza(RespostaC),
+    pergunta_dor_no_peito(RespostaDP),
+    pergunta_chiado_no_peito(RespostaCNP),
+    pergunta_dores_no_corpo(RespostaDNC),
+    pergunta_dor_nas_articulacoes(RespostaDNA),
+    pergunta_tontura(RespostaTon),
+    pergunta_vontade_frequente_de_urinar(RespostaUrina),
+    pergunta_vermelhidão_na_pele(RespostaVNP),
+    pergunta_coceira(RespostaCoceira),
+    pergunta_visão_embasada(RespostaVisao),
+    pergunta_fome_excessiva(RespostaFome),
+    pergunta_sede_excessiva(RespostaSede),
+    pergunta_manchas_na_pele(RespostaManchas),
+    pergunta_respiração_rápida(RespostaRespira),
+    pergunta_perda_de_peso(RespostaPeso),
+    pergunta_falta_de_ar(RespostaFDA),
 
-
+    append([RespostaF, RespostaDC, RespostaDG, RespostaNE, RespostaT, RespostaC, 
+    RespostaDP, RespostaCNP, RespostaDNC, RespostaDNA, RespostaTon, RespostaUrina, RespostaVNP, RespostaCoceira, RespostaVisao, RespostaFome, RespostaSede,
+    RespostaManchas, RespostaRespira, RespostaPeso, RespostaFDA],lista).
