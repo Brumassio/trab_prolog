@@ -1,69 +1,69 @@
+%  Doenca 1: Gripe
 sintoma(gripe, febre).
 sintoma(gripe, tosse).
-sintoma(gripe, dor_de_cabeça).
+sintoma(gripe, dor_de_cabeca).
 sintoma(gripe, dores_no_corpo).
 probabilidade(gripe, 0.6).
 
-#  Doença 2: Resfriado
+%  Doenca 2: Resfriado
 sintoma(resfriado, nariz_entupido).
 sintoma(resfriado, coriza).
 sintoma(resfriado, dor_de_garganta).
 sintoma(resfriado, tosse).
 probabilidade(resfriado, 0.4).
 
-#  Doença 3: Asma
+%  Doenca 3: Asma
 sintoma(asma, falta_de_ar).
 sintoma(asma, chiado_no_peito).
 sintoma(asma, tosse).
-sintoma(asma, respiração_rápida).
+sintoma(asma, respiracao_rapida).
 probabilidade(asma, 0.2).
 
-#  Doença 4: Bronquite
+%  Doenca 4: Bronquite
 sintoma(bronquite, tosse_com_catarro).
 sintoma(bronquite, falta_de_ar).
 sintoma(bronquite, chiado_no_peito).
 sintoma(bronquite, dor_no_peito).
 probabilidade(bronquite, 0.3).
 
-#  Doença 5: Pneumonia
+%  Doenca 5: Pneumonia
 sintoma(pneumonia, febre_alta).
 sintoma(pneumonia, tosse_com_catarro).
 sintoma(pneumonia, dor_no_peito).
-sintoma(pneumonia, respiração_rápida).
+sintoma(pneumonia, respiracao_rapida).
 probabilidade(pneumonia, 0.1).
 
-#  Doença 6: Dengue
+%  Doenca 6: Dengue
 sintoma(dengue, febre_alta).
-sintoma(dengue, dor_de_cabeça).
-sintoma(dengue, dor_nas_articulações).
+sintoma(dengue, dor_de_cabeca).
+sintoma(dengue, dor_nas_articulacões).
 sintoma(dengue, manchas_na_pele).
 probabilidade(dengue, 0.05).
 
-#  Doença 7: Zika
+%  Doenca 7: Zika
 sintoma(zika, febre_baixa).
 sintoma(zika, coceira).
-sintoma(zika, vermelhidão_na_pele).
-sintoma(zika, dor_nas_articulações).
+sintoma(zika, vermelhidao_na_pele).
+sintoma(zika, dor_nas_articulacões).
 probabilidade(zika, 0.03).
 
-#  Doença 8: Chikungunya
+%  Doenca 8: Chikungunya
 sintoma(chikungunya, febre_alta).
-sintoma(chikungunya, dor_nas_articulações).
-sintoma(chikungunya, dor_de_cabeça).
-sintoma(chikungunya, vermelhidão_na_pele).
+sintoma(chikungunya, dor_nas_articulacões).
+sintoma(chikungunya, dor_de_cabeca).
+sintoma(chikungunya, vermelhidao_na_pele).
 probabilidade(chikungunya, 0.02).
-
-# Doença 9: Diabetes
+% Doenca 9: Diabetes
 sintoma(diabetes, sede_excessiva).
 sintoma(diabetes, fome_excessiva).
 sintoma(diabetes, vontade_frequente_de_urinar).
 sintoma(diabetes, perda_de_peso).
 probabilidade(diabetes, 0.1).
 
-#  Doença 10: Hipertensão
-sintoma(hipertensao, dor_de_cabeça).
+%  Doenca 10: Hipertensao
+sintoma(hipertensao, dor_de_cabeca).
 sintoma(hipertensao, tontura).
-sintoma(hipertensao, visão_embasada).
+sintoma(hipertensao, visao_embasada).
 sintoma(hipertensao, dor_no_peito).
 probabilidade(hipertensao, 0.15).
 
@@ -74,118 +74,118 @@ minha_lista(lista).
 
 grau_febre(resposta2) :-
     write("\nSua temperatura esta ate 38 graus ou acima de 39 (responda com 38 ou 39)"),
-    read(resposta2),
-    (resposta2 == 38 -> resposta2 = febre_baixa; resposta2 = febre_alta).    
+    read(Resposta2),
+    (Resposta2 == 38 -> resposta2 = febre_baixa; resposta2 = febre_alta).    
     
 pergunta_febre(RespostaF) :-
-    write("\nEsta sentindo febre? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> grau_febre(resposta2), RespostaF = resposta2; RespostaF =  sem_febre). 
+    write("\nEsta sentindo febre? (sim ou nao):\n"),
+    read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim'-> grau_febre(resposta2); RespostaF = sem_febre). 
 
 grau_tosse(resposta2) :-
-    write("\ntosse com catarro ou sem (responda com ou sem)"),
-    read(resposta2),
-    (resposta2 == com -> resposta2 = tosse_com_catarro; resposta2 = tosse_sem_catarro).    
+    write("\ntosse com catarro ou sem (responda com ou sem):\n"),
+    read_string(user_input, "\n", "\r", _, Resposta2),
+    (Resposta2 == com -> resposta2 = tosse_com_catarro; resposta2 = tosse_sem_catarro).    
     
 pergunta_tosse(RespostaT) :-
-    write("\nEsta com tosse? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> grau_tosse(resposta2), RespostaT = resposta2; RespostaT =  sem_tosse).
+    write("\nEsta com tosse? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> grau_tosse(resposta2), RespostaT = resposta2; RespostaT =  sem_tosse).
 
 pergunta_dores_no_corpo(RespostaDNC) :-
-    write("\nEsta sentindo dores no corpo? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaDNC = dores_no_corpo; RespostaDNC = sem_dores_no_corpo ).
+    write("\nEsta sentindo dores no corpo? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaDNC = dores_no_corpo; RespostaDNC = sem_dores_no_corpo ).
 
 pergunta_dor_cabeca(RespostaDC) :-
-    write("\nEsta sentindo dor de cabeca? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaDC = dor_de_cabeça; RespostaDC = sem_dor_de_cabeça ).
+    write("\nEsta sentindo dor de cabeca? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaDC = dor_de_cabeca; RespostaDC = sem_dor_de_cabeca ).
 
 pergunta_dor_garganta(RespostaDG) :-
-    write("\nEsta sentindo dor de garganta? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaDG = dor_de_garganta; RespostaDG = sem_dor_de_garganta ).
+    write("\nEsta sentindo dor de garganta? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaDG = dor_de_garganta; RespostaDG = sem_dor_de_garganta ).
 
 pergunta_nariz_entupido(RespostaNE) :-
-    write("\nEsta com o nariz entupido? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaNE = nariz_entupido; RespostaNE = sem_nariz_entupido ).
+    write("\nEsta com o nariz entupido? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaNE = nariz_entupido; RespostaNE = sem_nariz_entupido ).
 
 pergunta_coriza(RespostaC) :-
-    write("\nEsta com coriza? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaC = coriza; RespostaC = sem_coriza ).
+    write("\nEsta com coriza? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaC = coriza; RespostaC = sem_coriza ).
 
 pergunta_dor_no_peito(RespostaDP) :-
-    write("\nEsta com dor no peito? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaDP = dor_no_peito; RespostaDP = sem_dor_no_peito ).
+    write("\nEsta com dor no peito? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaDP = dor_no_peito; RespostaDP = sem_dor_no_peito ).
 
 pergunta_chiado_no_peito(RespostaCNP) :-
-    write("\nEsta com chiado no peito? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaCNP = chiado_no_peito; RespostaCNP = sem_chiado_no_peito ).
+    write("\nEsta com chiado no peito? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim'-> RespostaCNP = chiado_no_peito; RespostaCNP = sem_chiado_no_peito ).
 
 pergunta_falta_de_ar(RespostaFDA) :-
-    write("\nEsta falta de ar? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaFDA = falta_de_ar; RespostaFDA = sem_falta_de_ar ).
+    write("\nEsta com falta de ar? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaFDA = falta_de_ar; RespostaFDA = sem_falta_de_ar ).
 
 pergunta_dor_nas_articulacoes(RespostaDNA) :-
-    write("\nEsta com dor nas articulações? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaDNA = dor_nas_articulações; RespostaDNA = sem_dor_nas_articulações).
+    write("\nEsta com dor nas articulacões? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaDNA = dor_nas_articulacões; RespostaDNA = sem_dor_nas_articulacões).
 
 pergunta_tontura(RespostaTon) :-
-    write("\nEsta com tontura? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaTon = tontura; RespostaTon = sem_tontura). 
+    write("\nEsta com tontura? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaTon = tontura; RespostaTon = sem_tontura). 
 
 pergunta_vontade_frequente_de_urinar(RespostaUrina) :-
-    write("\nEsta com vontade frequente de urinar? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaUrina = vontade_frequente_de_urinar; RespostaUrina = sem_vontade_frequente_de_urinar). 
+    write("\nEsta com vontade frequente de urinar? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim'-> RespostaUrina = vontade_frequente_de_urinar; RespostaUrina = sem_vontade_frequente_de_urinar). 
 
-pergunta_vermelhidão_na_pele(RespostaVNP) :-
-    write("\nEsta com vermelhidão na pele? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaVNP = vermelhidão_na_pele; RespostaVNP = sem_vermelhidão_na_pele). 
+pergunta_vermelhidao_na_pele(RespostaVNP) :-
+    write("\nEsta com vermelhidao na pele? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaVNP = vermelhidao_na_pele; RespostaVNP = sem_vermelhidao_na_pele). 
 
 pergunta_coceira(RespostaCoceira) :-
-    write("\nEsta com coceira? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaCoceira = coceira; RespostaCoceira = sem_coceira). 
+    write("\nEsta com coceira? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaCoceira = coceira; RespostaCoceira = sem_coceira). 
 
-pergunta_visão_embasada(RespostaVisao) :-
-    write("\nEsta com a visao embasada? (sim ou nao)"),
-    read(resposta),
-    (resposta == sim -> RespostaVisao = visão_embasada; RespostaVisao = sem_visão_embasada). 
+pergunta_visao_embasada(RespostaVisao) :-
+    write("\nEsta com a visao embasada? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaVisao = visao_embasada; RespostaVisao = sem_visao_embasada). 
 
 pergunta_fome_excessiva(RespostaFome) :-
-    write("\nEsta com fome excessiva ?"),
-    read(resposta),
-    (resposta == sim -> RespostaFome = fome_excessiva; RespostaFome = sem_fome_excessiva). 
+    write("\nEsta com fome excessiva ? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaFome = fome_excessiva; RespostaFome = sem_fome_excessiva). 
 
 pergunta_sede_excessiva(RespostaSede) :- 
-    write("\nEsta com sede excessiva ?"),
-    read(resposta),
-    (resposta == sim -> RespostaSede = sede_excessiva; RespostaSede = sem_sede_excessiva). 
+    write("\nEsta com sede excessiva ? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaSede = sede_excessiva; RespostaSede = sem_sede_excessiva). 
 
 pergunta_manchas_na_pele(RespostaManchas) :-
-    write("\nEsta com manchas na pele ?"),
-    read(resposta),
-    (resposta == sim -> RespostaManchas = manchas_na_pele; RespostaManchas = sem_manchas_na_pele). 
+    write("\nEsta com manchas na pele ? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaManchas = manchas_na_pele; RespostaManchas = sem_manchas_na_pele). 
 
-pergunta_respiração_rápida(RespostaRespira) :-
-    write("\nEsta com a respiracao rapida ?"),
-    read(resposta),
-    (resposta == sim -> RespostaRespira = respiração_rápida; RespostaRespira = sem_respiração_rápida). 
+pergunta_respiracao_rapida(RespostaRespira) :-
+    write("\nEsta com a respiracao rapida ? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaRespira = respiracao_rapida; RespostaRespira = sem_respiracao_rapida). 
 
 pergunta_perda_de_peso(RespostaPeso) :-
-    write("\nPercebeu uma perda de peso repentina ?"),
-    read(resposta),
-    (resposta == sim -> RespostaPeso = perda_de_peso; RespostaPeso = sem_perda_de_peso). 
+    write("\nPercebeu uma perda de peso repentina ? (sim ou nao):\n"),
+   read_string(user_input, "\n", "\r", _, Resposta),
+    (Resposta == 'sim' -> RespostaPeso = perda_de_peso; RespostaPeso = sem_perda_de_peso). 
 
 questionario(lista) :-
     write('Responda as seguintes perguntas: '),
@@ -201,13 +201,13 @@ questionario(lista) :-
     pergunta_dor_nas_articulacoes(RespostaDNA),
     pergunta_tontura(RespostaTon),
     pergunta_vontade_frequente_de_urinar(RespostaUrina),
-    pergunta_vermelhidão_na_pele(RespostaVNP),
+    pergunta_vermelhidao_na_pele(RespostaVNP),
     pergunta_coceira(RespostaCoceira),
-    pergunta_visão_embasada(RespostaVisao),
+    pergunta_visao_embasada(RespostaVisao),
     pergunta_fome_excessiva(RespostaFome),
     pergunta_sede_excessiva(RespostaSede),
     pergunta_manchas_na_pele(RespostaManchas),
-    pergunta_respiração_rápida(RespostaRespira),
+    pergunta_respiracao_rapida(RespostaRespira),
     pergunta_perda_de_peso(RespostaPeso),
     pergunta_falta_de_ar(RespostaFDA),
 
