@@ -1,3 +1,97 @@
+% Alunos:
+% Diogo Brumassio 120122 
+% Gabriel Rodrigues de Souza 
+
+% Curso:
+% Ciência da Computação (UEM)
+
+% Diciplina: 
+% Paradigmas de Programação Lógica e Funcional 
+% 2 Trabalho Prático
+
+% ler arquivo .txt  e  cadastrar paciente
+
+% o resultado do protótipo é apenas informativo e que o paciente deve consultar um médico para obter um diagnóstico correto e preciso.
+% 1. cadastrar
+:- use_module(library(readutil)).
+:- use_module(library(lists)).
+
+ler_arquivo_pacientes(NomeArquivo) :-
+    open(NomeArquivo, read, Stream),
+    ler_linha(Stream),
+    close(Stream).
+
+ler_linha(Stream) :-
+    read_line_to_codes(Stream, Line),
+    (Line == end_of_file -> true ; processar_linha(Line), ler_linha(Stream)).
+
+processar_linha(Line) :-
+    ascii_para_string(Line, String),
+    write(String), nl. % Exemplo: apenas imprime a linha lid
+
+ascii_para_string(Codes, String) :-
+    atom_codes(String, Codes).
+
+cadastrar_paciente(Nome) :-
+    assert(usuario([Nome | Lista])),
+    write('Usuario adicionado: '), write(Nome), nl.
+
+menu :-
+    repeat,
+    write('---------------------------'), nl,
+    write('       MENU PRINCIPAL      '), nl,
+    write('---------------------------'), nl,
+    write('1 - Listar usuarios'), nl,
+    write('2 - Cadastrar novo usuario'), nl,
+    write('3 - Editar usuario'), nl,
+    write('4 - Excluir usuario'), nl,
+    write('5 - Sair'), nl,
+    
+    read(Opcao),
+    opcao_menu(Opcao),
+    Opcao =:= 5, !.
+
+opcao_menu(1) :-
+    write('Listando pacientes: \n'),
+    ler_arquivo_pacientes('pacientes.txt').
+    
+opcao_menu(2) :-
+    write('Digite o nome do paciente: '),
+    read(Nome),
+    cadastrar_usuario(Nome),
+    write('Paciente cadastrado com sucesso!'), nl.
+
+opcao_menu(3) :-
+    write('Digite o nome do paciente: '),
+    read(Nome),
+    editar_paciente(Nome),
+    write('Paciente editado com sucesso!'), nl.
+    
+opcao_menu(4) :-
+    write('Digite o nome do Paciente: '),
+    read(Nome),
+    excluir_usuario(Nome),
+    write('Paciente excluido com sucesso!'), nl.
+
+opcao_menu(5) :- 
+    write('Saindo do sistema...').
+
+% cadastrar_usuario(Nome) :-
+%     assert(usuario(Nome)).
+
+% cadastrar paciente no arquivo .txt
+cadastrar_paciente(Nome, Idade) :-
+    open('pacientes.txt', append, Stream),
+    write(Stream, Nome, Idade), nl(Stream),
+    close(Stream).
+
+:- dynamic(paciente/1).
+
+
+
+
+
+
 %  Doenca 1: Gripe
 sintoma(gripe, febre).
 sintoma(gripe, tosse).
@@ -75,7 +169,7 @@ minha_lista(lista).
 grau_febre(resposta2) :-
     write("\nSua temperatura esta ate 38 graus ou acima de 39 (responda com 38 ou 39)"),
     read(Resposta2),
-    (Resposta2 == 38 -> resposta2 = febre_baixa; resposta2 = febre_alta).    
+    (Resposta2 = 38 -> resposta2 = febre_baixa; resposta2 = febre_alta).    
     
 pergunta_febre(RespostaF) :-
     write("\nEsta sentindo febre? (sim ou nao):\n"),
@@ -89,102 +183,102 @@ grau_tosse(resposta2) :-
     
 pergunta_tosse(RespostaT) :-
     write("\nEsta com tosse? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> grau_tosse(resposta2), RespostaT = resposta2; RespostaT =  sem_tosse).
 
 pergunta_dores_no_corpo(RespostaDNC) :-
     write("\nEsta sentindo dores no corpo? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaDNC = dores_no_corpo; RespostaDNC = sem_dores_no_corpo ).
 
 pergunta_dor_cabeca(RespostaDC) :-
     write("\nEsta sentindo dor de cabeca? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaDC = dor_de_cabeca; RespostaDC = sem_dor_de_cabeca ).
 
 pergunta_dor_garganta(RespostaDG) :-
     write("\nEsta sentindo dor de garganta? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaDG = dor_de_garganta; RespostaDG = sem_dor_de_garganta ).
 
 pergunta_nariz_entupido(RespostaNE) :-
     write("\nEsta com o nariz entupido? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaNE = nariz_entupido; RespostaNE = sem_nariz_entupido ).
 
 pergunta_coriza(RespostaC) :-
     write("\nEsta com coriza? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaC = coriza; RespostaC = sem_coriza ).
 
 pergunta_dor_no_peito(RespostaDP) :-
     write("\nEsta com dor no peito? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaDP = dor_no_peito; RespostaDP = sem_dor_no_peito ).
 
 pergunta_chiado_no_peito(RespostaCNP) :-
     write("\nEsta com chiado no peito? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim'-> RespostaCNP = chiado_no_peito; RespostaCNP = sem_chiado_no_peito ).
 
 pergunta_falta_de_ar(RespostaFDA) :-
     write("\nEsta com falta de ar? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaFDA = falta_de_ar; RespostaFDA = sem_falta_de_ar ).
 
 pergunta_dor_nas_articulacoes(RespostaDNA) :-
     write("\nEsta com dor nas articulacões? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaDNA = dor_nas_articulacões; RespostaDNA = sem_dor_nas_articulacões).
 
 pergunta_tontura(RespostaTon) :-
     write("\nEsta com tontura? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaTon = tontura; RespostaTon = sem_tontura). 
 
 pergunta_vontade_frequente_de_urinar(RespostaUrina) :-
     write("\nEsta com vontade frequente de urinar? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim'-> RespostaUrina = vontade_frequente_de_urinar; RespostaUrina = sem_vontade_frequente_de_urinar). 
 
 pergunta_vermelhidao_na_pele(RespostaVNP) :-
     write("\nEsta com vermelhidao na pele? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaVNP = vermelhidao_na_pele; RespostaVNP = sem_vermelhidao_na_pele). 
 
 pergunta_coceira(RespostaCoceira) :-
     write("\nEsta com coceira? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaCoceira = coceira; RespostaCoceira = sem_coceira). 
 
 pergunta_visao_embasada(RespostaVisao) :-
     write("\nEsta com a visao embasada? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaVisao = visao_embasada; RespostaVisao = sem_visao_embasada). 
 
 pergunta_fome_excessiva(RespostaFome) :-
     write("\nEsta com fome excessiva ? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaFome = fome_excessiva; RespostaFome = sem_fome_excessiva). 
 
 pergunta_sede_excessiva(RespostaSede) :- 
     write("\nEsta com sede excessiva ? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaSede = sede_excessiva; RespostaSede = sem_sede_excessiva). 
 
 pergunta_manchas_na_pele(RespostaManchas) :-
     write("\nEsta com manchas na pele ? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaManchas = manchas_na_pele; RespostaManchas = sem_manchas_na_pele). 
 
 pergunta_respiracao_rapida(RespostaRespira) :-
     write("\nEsta com a respiracao rapida ? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaRespira = respiracao_rapida; RespostaRespira = sem_respiracao_rapida). 
 
 pergunta_perda_de_peso(RespostaPeso) :-
     write("\nPercebeu uma perda de peso repentina ? (sim ou nao):\n"),
-   read_string(user_input, "\n", "\r", _, Resposta),
+    read_string(user_input, "\n", "\r", _, Resposta),
     (Resposta == 'sim' -> RespostaPeso = perda_de_peso; RespostaPeso = sem_perda_de_peso). 
 
 questionario(lista) :-
@@ -211,6 +305,7 @@ questionario(lista) :-
     pergunta_perda_de_peso(RespostaPeso),
     pergunta_falta_de_ar(RespostaFDA),
 
+    
     append([RespostaF, RespostaDC, RespostaDG, RespostaNE, RespostaT, RespostaC, 
     RespostaDP, RespostaCNP, RespostaDNC, RespostaDNA, RespostaTon, RespostaUrina, RespostaVNP, RespostaCoceira, RespostaVisao, RespostaFome, RespostaSede,
     RespostaManchas, RespostaRespira, RespostaPeso, RespostaFDA],lista).
