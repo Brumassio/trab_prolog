@@ -9,21 +9,15 @@
 % Paradigmas de Programação Lógica e Funcional 
 % 2 Trabalho Prático
 
-% ler arquivo .txt  e  cadastrar paciente
 
 % o resultado do protótipo é apenas informativo e que o paciente deve consultar um médico para obter um diagnóstico correto e preciso.
-% 1. cadastrar
+
 :- use_module(library(readutil)).
 :- use_module(library(lists)).
+:- use_module(library(system)).
 
-% read_string(String) :-
-%     current_input(Input),
-%     read_line_to_codes(Input, Codes),
-%     string_codes(String, Codes).
-read_string(String) :-
-    read_line_to_string(user_input, String).
+:- dynamic(paciente/2).
 
-    
 ler_arquivo_pacientes(NomeArquivo) :-
     open(NomeArquivo, read, Stream),
     ler_linha(Stream),
@@ -43,17 +37,17 @@ ascii_para_string(Codes, String) :-
 
 cadastrar_paciente(Nome) :-
     assert(usuario([Nome | Lista])),
-    write('Usuario adicionado: '), write(Nome), nl.
+    write('Paciente adicionado: '), write(Nome), nl.
 
 menu :-
     repeat,
     write('---------------------------'), nl,
     write('       MENU PRINCIPAL      '), nl,
     write('---------------------------'), nl,
-    write('1 - Listar usuarios'), nl,
-    write('2 - Cadastrar novo usuario'), nl,
-    write('3 - Editar usuario'), nl,
-    write('4 - Excluir usuario'), nl,
+    write('1 - Listar pacientes'), nl,
+    write('2 - Cadastrar novo paciente'), nl,
+    write('3 - Editar paciente'), nl,
+    write('4 - Excluir paciente'), nl,
     write('5 - Sair'), nl,
     
     read(Opcao),
@@ -83,30 +77,21 @@ opcao_menu(5) :-
     write('Saindo do sistema...').
 
 % cadastrar paciente no arquivo .txt
-    
-% adicionar_paciente(Nome, Idade) :-
-%     write('Digite o nome do paciente: '),
-%     read_string(user_input, "\n", "\r", _, Nome),
-%     write('Digite a idade do paciente: '),
-%     read_string(user_input, "\n", "\r", _, Idade),
-%     open('pacientes.txt', append, Stream),
-%     write(Stream, Nome), write(Stream, ', '), write(Stream, Idade), write(Stream, '\n'),
-%     close(Stream),
-%     write('Paciente cadastrado com sucesso!'), nl.
-
 adicionar_paciente(Nome, Idade) :-
+    %necessita estar entre aspas simples
     write('Digite o nome do paciente: '),
     read(Nome),
     write('Digite a idade do paciente: '),
     read(Idade),
-    open('pacientes.txt', append, Stream),
-    write(Stream, Nome), write(Stream, ', '), write(Stream, Idade), write(Stream, '\n'),
+    open('pacientes.txt', append, Stream), 
+    write(Stream, Nome), 
+    write(Stream, ','),
+    write(Stream, Idade), 
+    nl(Stream),
     close(Stream),
     write('Paciente cadastrado com sucesso!'), nl.
 
 
-
-:- dynamic(paciente/1).
 
 
 

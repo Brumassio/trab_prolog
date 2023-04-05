@@ -1,8 +1,6 @@
-Cassio, 35
-Fagner, 32
-Fabio Santos, 34
-Roger Guedes, 28
-Yuri Alberto, 20
-Renato Augusto, 33
-
-, 12
+Cassio,35
+Fagner,32
+Molina,21
+Guras,26
+Greff,20
+Brumas,21
