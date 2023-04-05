@@ -1,6 +1,8 @@
-Cassio
-Fagner
-Fabio Santos
-Roger Guedes
-Yuri Alberto
-Renato Augusto
+Cassio, 35
+Fagner, 32
+Fabio Santos, 34
+Roger Guedes, 28
+Yuri Alberto, 20
+Renato Augusto, 33
+
+, 12

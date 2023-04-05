@@ -16,6 +16,14 @@
 :- use_module(library(readutil)).
 :- use_module(library(lists)).
 
+% read_string(String) :-
+%     current_input(Input),
+%     read_line_to_codes(Input, Codes),
+%     string_codes(String, Codes).
+read_string(String) :-
+    read_line_to_string(user_input, String).
+
+    
 ler_arquivo_pacientes(NomeArquivo) :-
     open(NomeArquivo, read, Stream),
     ler_linha(Stream),
@@ -31,6 +39,7 @@ processar_linha(Line) :-
 
 ascii_para_string(Codes, String) :-
     atom_codes(String, Codes).
+
 
 cadastrar_paciente(Nome) :-
     assert(usuario([Nome | Lista])),
@@ -56,15 +65,12 @@ opcao_menu(1) :-
     ler_arquivo_pacientes('pacientes.txt').
     
 opcao_menu(2) :-
-    write('Digite o nome do paciente: '),
-    read(Nome),
-    cadastrar_usuario(Nome),
-    write('Paciente cadastrado com sucesso!'), nl.
-
+    adicionar_paciente(Nome,Idade).
+    
 opcao_menu(3) :-
     write('Digite o nome do paciente: '),
     read(Nome),
-    editar_paciente(Nome),
+    editar_paciente(Nome, Idade),
     write('Paciente editado com sucesso!'), nl.
     
 opcao_menu(4) :-
@@ -76,18 +82,31 @@ opcao_menu(4) :-
 opcao_menu(5) :- 
     write('Saindo do sistema...').
 
-% cadastrar_usuario(Nome) :-
-%     assert(usuario(Nome)).
-
 % cadastrar paciente no arquivo .txt
-cadastrar_paciente(Nome, Idade) :-
+    
+% adicionar_paciente(Nome, Idade) :-
+%     write('Digite o nome do paciente: '),
+%     read_string(user_input, "\n", "\r", _, Nome),
+%     write('Digite a idade do paciente: '),
+%     read_string(user_input, "\n", "\r", _, Idade),
+%     open('pacientes.txt', append, Stream),
+%     write(Stream, Nome), write(Stream, ', '), write(Stream, Idade), write(Stream, '\n'),
+%     close(Stream),
+%     write('Paciente cadastrado com sucesso!'), nl.
+
+adicionar_paciente(Nome, Idade) :-
+    write('Digite o nome do paciente: '),
+    read(Nome),
+    write('Digite a idade do paciente: '),
+    read(Idade),
     open('pacientes.txt', append, Stream),
-    write(Stream, Nome, Idade), nl(Stream),
-    close(Stream).
+    write(Stream, Nome), write(Stream, ', '), write(Stream, Idade), write(Stream, '\n'),
+    close(Stream),
+    write('Paciente cadastrado com sucesso!'), nl.
+
+
 
 :- dynamic(paciente/1).
-
-
 
 
 
