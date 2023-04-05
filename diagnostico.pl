@@ -35,10 +35,6 @@ ascii_para_string(Codes, String) :-
     atom_codes(String, Codes).
 
 
-cadastrar_paciente(Nome) :-
-    assert(usuario([Nome | Lista])),
-    write('Paciente adicionado: '), write(Nome), nl.
-
 menu :-
     repeat,
     write('---------------------------'), nl,
@@ -48,7 +44,8 @@ menu :-
     write('2 - Cadastrar novo paciente'), nl,
     write('3 - Editar paciente'), nl,
     write('4 - Excluir paciente'), nl,
-    write('5 - Sair'), nl,
+    write('5 - Realizar Diagnostico'), nl,
+    write('6 - Sair'), nl,
     
     read(Opcao),
     opcao_menu(Opcao),
@@ -68,22 +65,24 @@ opcao_menu(3) :-
     write('Paciente editado com sucesso!'), nl.
     
 opcao_menu(4) :-
-    write('Digite o nome do Paciente: '),
-    read(Nome),
-    excluir_usuario(Nome),
+    input_do_paciente(Nome, Idade),
+    excluir_paciente(Nome, Idade),
     write('Paciente excluido com sucesso!'), nl.
 
-opcao_menu(5) :- 
+    
+
+opcao_menu(6) :- 
     write('Saindo do sistema...').
 
 % cadastrar paciente no arquivo .txt
-adicionar_paciente(Nome, Idade) :-
-    %necessita estar entre aspas simples
+input_do_paciente(Nome, Idade) :-
     write('Digite o nome do paciente: '),
-    read(NomeAtom),
-    atom_string(NomeAtom, Nome),
+    read(Nome),
     write('Digite a idade do paciente: '),
-    read(Idade),
+    read(Idade).
+
+adicionar_paciente(Nome, Idade) :-
+    input_do_paciente(Nome, Idade),
     open('pacientes.txt', append, Stream), 
     write(Stream, Nome), 
     write(Stream, ','),
@@ -92,8 +91,30 @@ adicionar_paciente(Nome, Idade) :-
     close(Stream),
     write('Paciente cadastrado com sucesso!'), nl.
 
+%editar paciente (Nome, Idade) do arquivo pacientes.txt, caso o paciente não exista, retorna erro
 
+excluir_paciente(Nome, Idade) :-
+    open('pacientes.txt', read, In),
+    open('pacientes_tmp.txt', write, Out),
+    excluir_paciente_aux(Nome, Idade, In, Out),
+    close(In),
+    close(Out),
+    rename_file('pacientes_tmp.txt', 'pacientes.txt').
 
+excluir_paciente_aux(Nome, Idade, In, Out) :-
+    read_line_to_codes(In, Line),
+    (   Line == end_of_file
+    ->  true
+    ;   atom_codes(NomeIdade, Line),
+        atomic_list_concat([NomeA, IdadeA], ',', NomeIdade),
+        (   NomeA == Nome,
+            IdadeA == Idade
+        ->  true
+        ;   atom_codes(NewLine, Line),
+            writeln(Out, NewLine)
+        ),
+        excluir_paciente_aux(Nome, Idade, In, Out)
+    ).
 
 
 %  Doenca 1: Gripe
