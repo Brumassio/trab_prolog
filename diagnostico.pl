@@ -80,7 +80,8 @@ opcao_menu(5) :-
 adicionar_paciente(Nome, Idade) :-
     %necessita estar entre aspas simples
     write('Digite o nome do paciente: '),
-    read(Nome),
+    read(NomeAtom),
+    atom_string(NomeAtom, Nome),
     write('Digite a idade do paciente: '),
     read(Idade),
     open('pacientes.txt', append, Stream), 
@@ -90,7 +91,6 @@ adicionar_paciente(Nome, Idade) :-
     nl(Stream),
     close(Stream),
     write('Paciente cadastrado com sucesso!'), nl.
-
 
 
 
