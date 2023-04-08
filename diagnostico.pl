@@ -72,7 +72,11 @@ opcao_menu(2) :-
 opcao_menu(3) :-
     write('Digite o nome e a idade do paciente que deseja editar:'), nl,
     input_do_paciente(Nome, Idade),
-    editar_paciente(Nome, Idade),
+    write('Digite o novo nome do paciente:'), nl,
+    read(NovoNome),
+    write('Digite a nova idade do paciente:'), nl,
+    read(NovaIdade),
+    editar_paciente(Nome, Idade, NovoNome, NovaIdade),
     write('Paciente editado com sucesso!'), nl.
     
 opcao_menu(4) :-
@@ -147,6 +151,62 @@ excluir_paciente_aux(Nome, Idade, In, Out) :-
         excluir_paciente_aux(Nome, Idade, In, Out)
     ).
 
+% Predicado para substituir elemento em uma lista
+replace([_|T], 0, X, [X|T]).
+replace([H|T], I, X, [H|R]) :- I > -1, NI is I-1, replace(T, NI, X, R), !.
+
+% Predicado para editar paciente em arquivo
+editar_paciente(Nome, Idade, NovoNome, NovaIdade) :-
+    open('pacientes.txt', read, Str),
+    linhas_em_lista(Str, Lines),
+    close(Str),
+
+    % Encontrar índice da linha desejada
+    nth0(Index, Lines, Nome + ',' + Idade),
+
+    % Modificar a string que representa a linha desejada
+    replace(Lines, Index, NovoNome + ',' + NovaIdade, NewLines),
+
+    % Abrir arquivo para escrita
+    tell('pacientes.txt'),
+    maplist(write_ln, NewLines),
+    told.
+
+% Predicado para ler arquivo e armazenar conteúdo em uma lista de strings
+linhas_em_lista(Stream,[]) :- at_end_of_stream(Stream).
+linhas_em_lista(Stream,[X|L]) :- \+ at_end_of_stream(Stream), read_line_to_string(Stream,X), linhas_em_lista(Stream,L).
+
+% probabilidade de uma doença, dado uma lista de sintomas
+probabilidade_doenca(Doenca, Sintomas, Prob) :-
+    probabilidade(Doenca, P), % probabilidade padrão da doença
+    probabilidade_sintomas(Doenca, Sintomas, PS), % probabilidade de ter os sintomas na doença
+    Prob is P * PS. % probabilidade da doença, dado os sintomas
+
+% probabilidade de ter uma lista de sintomas na doença
+probabilidade_sintomas(_, [], 1).
+probabilidade_sintomas(Doenca, [Sintoma|Resto], PS) :-
+    sintoma(Doenca, Sintoma), % se a doença tem o sintoma
+    probabilidade_sintomas(Doenca, Resto, PS1), % calcular a probabilidade do resto dos sintomas
+    PS is PS1 * 0.9. % considerar uma probabilidade alta (0.9) para ter um sintoma
+probabilidade_sintomas(Doenca, [Sintoma|Resto], PS) :-
+    \+ sintoma(Doenca, Sintoma), % se a doença não tem o sintoma
+    probabilidade_sintomas(Doenca, Resto, PS1), % calcular a probabilidade do resto dos sintomas
+    PS is PS1 * 0.1. % considerar uma probabilidade baixa (0.1) para não ter um sintoma
+
+% lista de sintomas do paciente
+sintomas_paciente([febre, tosse, dor_de_cabeca]).
+
+% calcular a probabilidade para cada doença
+calcular_probabilidade_doencas(Probs) :-
+    sintomas_paciente(Sintomas),
+    findall(Prob-D, (probabilidade_doenca(D, Sintomas, Prob)), Pares),
+    sort(Pares, Probs). % ordenar por ordem decrescente de probabilidade
+
+% exibir as doenças com as respectivas probabilidades
+exibir_probabilidades_doencas :-
+    calcular_probabilidade_doencas(Probs),
+    write('Probabilidades de doenças:'), nl,
+    forall(member(Prob-D, Probs), (write(D), write(': '), write(Prob), nl)).
 
 %  Doenca 1: Gripe
 sintoma(gripe, febre).
