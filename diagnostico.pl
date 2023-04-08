@@ -54,7 +54,7 @@ menu :-
     write('3 - Editar pacientes'), nl,
     write('4 - Excluir paciente'), nl,
     write('5 - Realizar Diagnostico'), nl,
-    write('6 - Listar Probabilidades'), nl,
+    write('6 - Listar Probabilidades'), nl, %fazer ele listar no final do diagnostico?
     write('7 - Sair'), nl,
     
     read(Opcao),
@@ -70,11 +70,11 @@ opcao_menu(2) :-
     adicionar_paciente(Nome,Idade).
     
 opcao_menu(3) :-
-    write('Digite o nome e a idade do paciente que deseja editar:'), nl,
+    write('Editando !!!'), nl,
     input_do_paciente(Nome, Idade),
-    write('Digite o novo nome do paciente:'), nl,
+    write('Digite o novo nome do paciente:'), 
     read(NovoNome),
-    write('Digite a nova idade do paciente:'), nl,
+    write('Digite a nova idade do paciente:'), 
     read(NovaIdade),
     editar_paciente(Nome, Idade, NovoNome, NovaIdade),
     write('Paciente editado com sucesso!'), nl.
@@ -120,7 +120,7 @@ input_do_paciente(Nome, Idade) :-
 adicionar_paciente(Nome, Idade) :-
     open('pacientes.txt', append, Stream), 
     write(Stream, Nome), 
-    write(Stream, ','),
+    write(Stream, '| '),
     write(Stream, Idade), 
     nl(Stream),
     close(Stream),
@@ -141,40 +141,50 @@ excluir_paciente_aux(Nome, Idade, In, Out) :-
     (   Line == end_of_file
     ->  true
     ;   atom_codes(NomeIdade, Line),
-        atomic_list_concat([NomeA, IdadeA], ',', NomeIdade),
-        (   NomeA == Nome,
-            IdadeA == Idade
+        atomic_list_concat([NomeA, IdadeA], '| ', NomeIdade),
+        atom_number(IdadeA, IdadeA2),
+        (   
+            NomeA == Nome,
+            IdadeA2 == Idade
         ->  true
-        ;   atom_codes(NewLine, Line),
+        ;   
+            atom_codes(NewLine, Line),
             writeln(Out, NewLine)
         ),
         excluir_paciente_aux(Nome, Idade, In, Out)
     ).
 
-% Predicado para substituir elemento em uma lista
-replace([_|T], 0, X, [X|T]).
-replace([H|T], I, X, [H|R]) :- I > -1, NI is I-1, replace(T, NI, X, R), !.
-
-% Predicado para editar paciente em arquivo
 editar_paciente(Nome, Idade, NovoNome, NovaIdade) :-
-    open('pacientes.txt', read, Str),
-    linhas_em_lista(Str, Lines),
-    close(Str),
+    open('pacientes.txt', read, In),
+    open('pacientes_tmp.txt', write, Out),
+    editar_paciente_aux(Nome, Idade, NovoNome, NovaIdade, In, Out),
+    close(In),
+    close(Out),
+    rename_file('pacientes_tmp.txt', 'pacientes.txt').
 
-    % Encontrar índice da linha desejada
-    nth0(Index, Lines, Nome + ',' + Idade),
-
-    % Modificar a string que representa a linha desejada
-    replace(Lines, Index, NovoNome + ',' + NovaIdade, NewLines),
-
-    % Abrir arquivo para escrita
-    tell('pacientes.txt'),
-    maplist(write_ln, NewLines),
-    told.
-
-% Predicado para ler arquivo e armazenar conteúdo em uma lista de strings
-linhas_em_lista(Stream,[]) :- at_end_of_stream(Stream).
-linhas_em_lista(Stream,[X|L]) :- \+ at_end_of_stream(Stream), read_line_to_string(Stream,X), linhas_em_lista(Stream,L).
+editar_paciente_aux(Nome, Idade, NovoNome, NovaIdade, In, Out) :-
+    read_line_to_codes(In, Line),
+    (   Line == end_of_file
+    ->  true
+    ;   atom_codes(NomeIdade, Line),
+        atomic_list_concat([NomeA, IdadeA], '| ', NomeIdade),
+        atom_number(IdadeA, IdadeA2),
+        write('TO AQUI !!!'), nl,
+        (   
+            NomeA == Nome,
+            IdadeA2 == Idade
+        ->  
+            write('To escrevendo aqui po'), nl,
+            write(Out, NovoNome), 
+            write(Out, '| '),
+            write(Out, NovaIdade), 
+            nl(Out)
+        ;   
+            atom_codes(NewLine, Line),
+            writeln(Out, NewLine)
+        ),
+        editar_paciente_aux(Nome, Idade,NovoNome, NovaIdade, In, Out)
+    ).
 
 % probabilidade de uma doença, dado uma lista de sintomas
 probabilidade_doenca(Doenca, Sintomas, Prob) :-
