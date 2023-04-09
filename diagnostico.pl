@@ -21,7 +21,7 @@
 :- discontiguous probabilidade/2.
 :- discontiguous printa_lista/1.
 :- discontiguous comparar_listas/3.
-
+:- discontiguous doencas/1.
 % ler arquivo pacientes.txt
 ler_arquivo_pacientes(NomeArquivo) :-
     open(NomeArquivo, read, Stream),
@@ -84,7 +84,7 @@ opcao_menu(4) :-
     write('Paciente excluido com sucesso!'), nl.
 
 opcao_menu(5) :-
-    questionario(ListaRespostas).
+    questionario.
 
 % opcao_menu(6) :-
 %     write('Listando probabilidades: \n'),
@@ -228,43 +228,35 @@ exibir_probabilidades_doencas :-
 % comparar_listas([_|T1], L2, T2) :-
 %     comparar_listas(T1, L2, T2).
 
-%  Doenca 1: Gripe
 sintomas(gripe, [febre, tosse, dor_de_cabeca, dores_no_corpo]). % sintomas da gripe
 probabilidade(gripe, 0.6).
 
-%  Doenca 2: Resfriado
+
 sintomas(resfriado, [nariz_entupido, coriza, dor_de_garganta, tosse]). % sintomas do resfriado
 probabilidade(resfriado, 0.4).
 
-%  Doenca 3: Asma
+
 sintomas(asma, [falta_de_ar, chiado_no_peito, tosse, respiracao_rapida]). % sintomas da asma
 probabilidade(asma, 0.2).
 
-%  Doenca 4: Bronquite
 sintomas(bronquite, [tosse_com_catarro, falta_de_ar, chiado_no_peito, dor_no_peito]). % sintomas da bronquite
 probabilidade(bronquite, 0.3).
 
-%  Doenca 5: Pneumonia
 sintomas(pneumonia, [febre_alta, tosse_com_catarro, dor_no_peito, respiracao_rapida]). % sintomas da pneumonia
 probabilidade(pneumonia, 0.1).
 
-%  Doenca 6: Dengue
 sintomas(dengue, [febre_alta, dor_de_cabeca, dor_nas_articulacoes, manchas_na_pele]). % sintomas da dengue
 probabilidade(dengue, 0.05).
 
-%  Doenca 7: Zika
 sintomas(zika, [febre_baixa, coceira, vermelhidao_na_pele, dor_nas_articulacoes]). % sintomas da zika
 probabilidade(zika, 0.03).
 
-%  Doenca 8: Chikungunya
 sintomas(chikungunya, [febre_alta, dor_nas_articulacoes, dor_de_cabeca, vermelhidao_na_pele]). % sintomas da chikungunya
 probabilidade(chikungunya, 0.02).
 
-% Doenca 9: Chikungunya
 sintomas(diabetes, [sede_excessiva, fome_excessiva, vontade_frequente_de_urinar, perda_de_peso]). % sintomas da diabetes
 probabilidade(diabetes, 0.1).
 
-%  Doenca 10: Hipertensao
 sintomas(hipertensao, [dor_de_cabeca, tontura, visao_embasada, dor_no_peito]). % sintomas da hipertensao
 probabilidade(hipertensao, 0.15).
 
@@ -286,135 +278,138 @@ sintomas_do_paciente(Respostas, Sintomas) :-
 sintomas_da_doenca(Doenca, Sintomas) :-
     sintomas(Doenca, Sintomas).
 
-printa_lista([], _).
-printa_lista(ListaComp) :-
+printa_lista(ListaIguais) :-
     write('Sintomas do paciente: '), nl,
-    forall(member(X, ListaComp), (write(X), nl)).
+    write(ListaIguais), nl.
 
 teste(ListaIguais) :-
     write(ListaIguais), nl,
     write('Imprimindo dnv pra ver se da'), nl,
     write(ListaIguais), nl.
 
+intersect(Lista1, Lista2, R) :-
+    findall(X, (member(X, Lista1), member(X, Lista2)), R).
+
+
 %%%%%%%%%%%%%%%%%%% QUESTIONARIO DE SINTOMAS DO PACIENTE %%%%%%%%%%%%%%%%%%%%
 
 pergunta_febre(RespostaF) :-
     write('\nEsta sentindo febre? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> grau_febre(RespostaF); true).
+    (Resposta == sim -> grau_febre(RespostaF); RespostaF = 0).
     
 grau_febre(RespostaF) :-
     write('\nSua temperatura esta ate 38 graus ou acima de 39 (responda maior ou igual a 39 ou inferior a 39)'),
     read(Resposta),
-    (Resposta >= 39 -> RespostaF = 'febre_alta'; RespostaF = 'febre_baixa').
+    (Resposta >= 39 -> RespostaF = febre_alta; RespostaF = febre_baixa).
 
 pergunta_tosse(RespostaT) :-
     write('\nEsta com tosse? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> grau_tosse(RespostaT); true).
+    (Resposta == sim -> grau_tosse(RespostaT); RespostaT = 0).
 
 grau_tosse(RespostaT) :-
     write('\ntosse com catarro (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaT = 'tosse_com_catarro'; RespostaT = 'tosse_sem_catarro').    
+    (Resposta == sim -> RespostaT = tosse_com_catarro; RespostaT = tosse_sem_catarro).
 
 pergunta_dores_no_corpo(RespostaDNC) :-
     write('\nEsta sentindo dores no corpo? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaDNC = 'dor_no_corpo'; true).
+    (Resposta == sim -> RespostaDNC = dor_no_corpo; RespostaDNC = 0).
 
 pergunta_dor_cabeca(RespostaDC) :-
     write('\nEsta sentindo dor de cabeca? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaDC = 'dor_de_cabeca'; true ).
+    (Resposta == sim -> RespostaDC = dor_de_cabeca; RespostaDC = 0).
 
 pergunta_dor_garganta(RespostaDG) :-
     write('\nEsta sentindo dor de garganta? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaDG = 'dor_de_garganta'; true ).
+    (Resposta == sim -> RespostaDG = dor_de_garganta;RespostaDG = 0 ).
 
 pergunta_nariz_entupido(RespostaNE) :-
     write('\nEsta com o nariz entupido? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaNE = 'nariz_entupido';true ).
+    (Resposta == sim -> RespostaNE = nariz_entupido; RespostaNE = 0 ).
 
 pergunta_coriza(RespostaC) :-
     write('\nEsta com coriza? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaC = 'coriza'; true ).
+    (Resposta == sim -> RespostaC = coriza; RespostaC = 0).
 
 pergunta_dor_no_peito(RespostaDP) :-
     write('\nEsta com dor no peito? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaDP = 'dor_no_peito'; true ).
+    (Resposta == sim -> RespostaDP = dor_no_peito; RespostaDP = 0).
 
 pergunta_chiado_no_peito(RespostaCNP) :-
     write('\nEsta com chiado no peito? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim'-> RespostaCNP = 'chiado_no_peito'; true ).
+    (Resposta == sim-> RespostaCNP = chiado_no_peito; RespostaCNP = 0).
 
 pergunta_falta_de_ar(RespostaFDA) :-
     write('\nEsta com falta de ar? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaFDA = 'falta_de_ar'; true ).
+    (Resposta == sim -> RespostaFDA = falta_de_ar; RespostaFDA = 0).
 
 pergunta_dor_nas_articulacoes(RespostaDNA) :-
     write('\nEsta com dor nas articulacões? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaDNA = 'dor_nas_articulacoes'; true).
+    (Resposta == sim -> RespostaDNA = dor_nas_articulacoes; RespostaDNA = 0).
 
 pergunta_tontura(RespostaTon) :-
     write('\nEsta com tontura? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaTon = 'tontura'; true). 
+    (Resposta == sim -> RespostaTon = tontura; RespostaTon = 0).
 
 pergunta_vontade_frequente_de_urinar(RespostaUrina) :-
     write('\nEsta com vontade frequente de urinar? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim'-> RespostaUrina = 'vontade_frequente_de_urinar'; true). 
+    (Resposta == sim-> RespostaUrina = vontade_frequente_de_urinar; RespostaUrina = 0).
 
 pergunta_vermelhidao_na_pele(RespostaVNP) :-
     write('\nEsta com vermelhidao na pele? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaVNP = 'vermelhidao_na_pele';true). 
+    (Resposta == sim -> RespostaVNP = vermelhidao_na_pele; RespostaVNP = 0).
 
 pergunta_coceira(RespostaCoceira) :-
     write('\nEsta com coceira? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaCoceira = 'coceira'; true). 
+    (Resposta == sim -> RespostaCoceira = coceira; RespostaCoceira = 0).
 
 pergunta_visao_embasada(RespostaVisao) :-
     write('\nEsta com a visao embasada? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaVisao = 'visao_embasada';true). 
+    (Resposta == sim -> RespostaVisao = visao_embasada; RespostaVisao = 0).
 
 pergunta_fome_excessiva(RespostaFome) :-
     write('\nEsta com fome excessiva ? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaFome = 'fome_excessiva'; true). 
+    (Resposta == sim -> RespostaFome = fome_excessiva; RespostaFome = 0).
 
 pergunta_sede_excessiva(RespostaSede) :- 
     write('\nEsta com sede excessiva ? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaSede = 'sede_excessiva'; true). 
+    (Resposta == sim -> RespostaSede = sede_excessiva; RespostaSede = 0).
 
 pergunta_manchas_na_pele(RespostaManchas) :-
     write('\nEsta com manchas na pele ? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaManchas = 'manchas_na_pele'; true). 
+    (Resposta == sim -> RespostaManchas = manchas_na_pele;  RespostaManchas = 0).
 
 pergunta_respiracao_rapida(RespostaRespira) :-
     write('\nEsta com a respiracao rapida ? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaRespira = 'respiracao_rapida'; true). 
+    (Resposta == sim -> RespostaRespira = respiracao_rapida; RespostaRespira = 0).
 
 pergunta_perda_de_peso(RespostaPeso) :-
     write('\nPercebeu uma perda de peso repentina ? (sim ou nao): '),
     read(Resposta),
-    (Resposta == 'sim' -> RespostaPeso = 'perda_de_peso'; true). 
+    (Resposta == sim -> RespostaPeso = perda_de_peso; RespostaPeso = 0).
     
 %escreva todas as doenças que o programa pode identificar
-questionario(ListaRespostas) :-
+questionario :-
     write('Responda as seguintes perguntas: '), nl,
     pergunta_febre(RespostaF),  
     pergunta_tosse(RespostaT), 
@@ -437,13 +432,10 @@ questionario(ListaRespostas) :-
     pergunta_manchas_na_pele(RespostaManchas),
     pergunta_respiracao_rapida(RespostaRespira),
     pergunta_perda_de_peso(RespostaPeso),
-    
+    % amamos o vitor greff
+    ListaRespostas = [RespostaF, RespostaT, RespostaDNC, RespostaDC, RespostaDG, RespostaNE, RespostaC, RespostaDP, RespostaCNP, RespostaFDA, RespostaDNA, RespostaTon, RespostaUrina, RespostaVNP, RespostaCoceira, RespostaVisao, RespostaFome, RespostaSede, RespostaManchas, RespostaRespira, RespostaPeso],
+    ListaAux = ['febre_alta','febre_baixa','tosse_com_catarro','tosse_sem_catarro','dor_no_corpo','dor_de_cabeca','dor_de_garganta','nariz_entupido','coriza','dor_no_peito','chiado_no_peito','dor_nas_articulacoes','tontura','vontade_frequente_de_urinar','vermelhidao_na_pele','coceira','visao_embasada','fome_excessiva','sede_excessiva','manchas_na_pele','respiracao_rapida','perda_de_peso','falta_de_ar'],
+    intersection(ListaRespostas,ListaAux, ListaIguais), nl,
+    write(ListaIguais).
 
-    append([],[RespostaF, RespostaT, RespostaDNC, RespostaDC, RespostaDG, RespostaNE, RespostaC, RespostaDP, RespostaCNP, RespostaFDA, RespostaDNA, RespostaTon, RespostaUrina, RespostaVNP, RespostaCoceira, RespostaVisao, RespostaFome, RespostaSede, RespostaManchas, RespostaRespira, RespostaPeso], ListaRespostas),
-    append([],['febre_alta','febre_baixa','tosse_com_catarro','tosse_sem_catarro','dor_no_corpo','dor_de_cabeca','dor_de_garganta','nariz_entupido','coriza','dor_no_peito','chiado_no_peito','dor_nas_articulacoes','tontura','vontade_frequente_de_urinar','vermelhidao_na_pele','coceira','visao_embasada','fome_excessiva','sede_excessiva','manchas_na_pele','respiracao_rapida','perda_de_peso','falta_de_ar'],ListaComp),
-    intersection(ListaRespostas, ListaComp, ListaIguais),
-    % intersection(ListaIguais,ListaComp,ListaIguais),
-    sleep(2),
-    teste(ListaIguais).
-    %printa_lista(ListaIguais).
     % calcular_probabilidade_doencas(ListaRespostas, ListaProbabilidades)
