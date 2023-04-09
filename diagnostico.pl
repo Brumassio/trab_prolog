@@ -221,12 +221,12 @@ exibir_probabilidades_doencas :-
     forall(member(Prob-D, Probs), (write(D), write(': '), write(Prob), nl)).
 
 
-comparar_listas([], _, []).
-comparar_listas([H1|T1], L2, [H1|T2]) :-
-    member(H1, L2),
-    comparar_listas(T1, L2, T2).
-comparar_listas([_|T1], L2, T2) :-
-    comparar_listas(T1, L2, T2).
+% comparar_listas([], _, []).
+% comparar_listas([H1|T1], L2, [H1|T2]) :-
+%     member(H1, L2),
+%     comparar_listas(T1, L2, T2).
+% comparar_listas([_|T1], L2, T2) :-
+%     comparar_listas(T1, L2, T2).
 
 %  Doenca 1: Gripe
 sintomas(gripe, [febre, tosse, dor_de_cabeca, dores_no_corpo]). % sintomas da gripe
@@ -291,6 +291,11 @@ printa_lista(ListaComp) :-
     write('Sintomas do paciente: '), nl,
     forall(member(X, ListaComp), (write(X), nl)).
 
+teste(ListaIguais) :-
+    write(ListaIguais), nl,
+    write('Imprimindo dnv pra ver se da'), nl,
+    write(ListaIguais), nl.
+
 %%%%%%%%%%%%%%%%%%% QUESTIONARIO DE SINTOMAS DO PACIENTE %%%%%%%%%%%%%%%%%%%%
 
 pergunta_febre(RespostaF) :-
@@ -299,7 +304,7 @@ pergunta_febre(RespostaF) :-
     (Resposta == 'sim' -> grau_febre(RespostaF); true).
     
 grau_febre(RespostaF) :-
-    write('\nSua temperatura esta ate 38 graus ou acima de 39 (responda com 38 ou 39)'),
+    write('\nSua temperatura esta ate 38 graus ou acima de 39 (responda maior ou igual a 39 ou inferior a 39)'),
     read(Resposta),
     (Resposta >= 39 -> RespostaF = 'febre_alta'; RespostaF = 'febre_baixa').
 
@@ -415,28 +420,30 @@ questionario(ListaRespostas) :-
     pergunta_tosse(RespostaT), 
     pergunta_dores_no_corpo(RespostaDNC), 
     pergunta_dor_cabeca(RespostaDC),
-    % pergunta_dor_garganta(RespostaDG),  
-    % pergunta_nariz_entupido(RespostaNE),    
-    % pergunta_coriza(RespostaC),   
-    % pergunta_dor_no_peito(RespostaDP), 
-    % pergunta_chiado_no_peito(RespostaCNP),   
-    % pergunta_falta_de_ar(RespostaFDA),   
-    % pergunta_dor_nas_articulacoes(RespostaDNA),
-    % pergunta_tontura(RespostaTon),   
-    % pergunta_vontade_frequente_de_urinar(RespostaUrina),    
-    % pergunta_vermelhidao_na_pele(RespostaVNP),    
-    % pergunta_coceira(RespostaCoceira),
-    % pergunta_visao_embasada(RespostaVisao),   
-    % pergunta_fome_excessiva(RespostaFome),    
-    % pergunta_sede_excessiva(RespostaSede),    
-    % pergunta_manchas_na_pele(RespostaManchas),
-    % pergunta_respiracao_rapida(RespostaRespira),
-    % pergunta_perda_de_peso(RespostaPeso),
+    pergunta_dor_garganta(RespostaDG),  
+    pergunta_nariz_entupido(RespostaNE),    
+    pergunta_coriza(RespostaC),   
+    pergunta_dor_no_peito(RespostaDP), 
+    pergunta_chiado_no_peito(RespostaCNP),   
+    pergunta_falta_de_ar(RespostaFDA),   
+    pergunta_dor_nas_articulacoes(RespostaDNA),
+    pergunta_tontura(RespostaTon),   
+    pergunta_vontade_frequente_de_urinar(RespostaUrina),    
+    pergunta_vermelhidao_na_pele(RespostaVNP),    
+    pergunta_coceira(RespostaCoceira),
+    pergunta_visao_embasada(RespostaVisao),   
+    pergunta_fome_excessiva(RespostaFome),    
+    pergunta_sede_excessiva(RespostaSede),    
+    pergunta_manchas_na_pele(RespostaManchas),
+    pergunta_respiracao_rapida(RespostaRespira),
+    pergunta_perda_de_peso(RespostaPeso),
+    
 
-    append([],[RespostaF, RespostaT, RespostaDNC, RespostaDC], ListaRespostas),
-    write(ListaRespostas).
-    % append([],['febra_alta','febre_baixa','tosse_com_catarro','tosse_sem_catarro','dor_no_corpo','dor_de_cabeca','dor_de_garganta','nariz_entupido','coriza','dor_no_peito','chiado_no_peito','dor_nas_articulacoes','tontura','vontade_frequente_de_urinar','vermelhidao_na_pele','coceira','visao_embasada','fome_excessiva','sede_excessiva','manchas_na_pele','respiracao_rapida','perda_de_peso','falta_de_ar'],ListaComp),
-    % comparar_listas(ListaRespostas, ListaComp, ListaIguais),
-    %, RespostaDG, RespostaNE, RespostaC, RespostaDP, RespostaCNP, RespostaFDA, RespostaDNA, RespostaTon, RespostaUrina, RespostaVNP, RespostaCoceira, RespostaVisao, RespostaFome, RespostaSede, RespostaManchas, RespostaRespira, RespostaPeso
+    append([],[RespostaF, RespostaT, RespostaDNC, RespostaDC, RespostaDG, RespostaNE, RespostaC, RespostaDP, RespostaCNP, RespostaFDA, RespostaDNA, RespostaTon, RespostaUrina, RespostaVNP, RespostaCoceira, RespostaVisao, RespostaFome, RespostaSede, RespostaManchas, RespostaRespira, RespostaPeso], ListaRespostas),
+    append([],['febre_alta','febre_baixa','tosse_com_catarro','tosse_sem_catarro','dor_no_corpo','dor_de_cabeca','dor_de_garganta','nariz_entupido','coriza','dor_no_peito','chiado_no_peito','dor_nas_articulacoes','tontura','vontade_frequente_de_urinar','vermelhidao_na_pele','coceira','visao_embasada','fome_excessiva','sede_excessiva','manchas_na_pele','respiracao_rapida','perda_de_peso','falta_de_ar'],ListaComp),
+    intersection(ListaRespostas, ListaComp, ListaIguais),
+    % intersection(ListaIguais,ListaComp,ListaIguais),
+    sleep(2),
+    teste(ListaIguais).
     %printa_lista(ListaIguais).
     % calcular_probabilidade_doencas(ListaRespostas, ListaProbabilidades)
