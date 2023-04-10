@@ -2,13 +2,13 @@
 :- discontiguous probabilidade/2.
 
 %%%%%%%%%%%%%%%%%%% SINTOMAS %%%%%%%%%%%%%%%%%%%%
-sintomas(gripe, [febre_alta, tosse, dor_de_cabeca, dores_no_corpo]). % sintomas da gripe
+sintomas(gripe, [febre_alta, tosse_sem_catarro, dor_de_cabeca, dor_no_corpo]). % sintomas da gripe
 probabilidade(gripe, 0.8). 
 
-sintomas(resfriado, [nariz_entupido, coriza, dor_de_garganta, tosse]). % sintomas do resfriado
+sintomas(resfriado, [nariz_entupido, coriza, dor_de_garganta, tosse_com_catarro]). % sintomas do resfriado
 probabilidade(resfriado, 0.7).
 
-sintomas(covid_19, [febre_alta, tosse, falta_de_ar, dor_de_cabeca]). % sintomas do covid_19
+sintomas(covid_19, [febre_alta, tosse_sem_catarro, falta_de_ar, dor_de_cabeca]). % sintomas do covid_19
 probabilidade(covid_19, 0.9).
 
 sintomas(asma, [falta_de_ar, chiado_no_peito, tosse, respiracao_rapida]). % sintomas da asma

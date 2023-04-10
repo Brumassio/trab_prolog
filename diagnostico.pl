@@ -18,9 +18,7 @@
 :- use_module(library(system)).
 
 :- dynamic(paciente/2).
-:- dynamic(doenca/2).
 
-:- discontiguous printa_lista/1.
 :- discontiguous doencas/1.
 
 % regra principal do trabalho
@@ -92,7 +90,7 @@ questionario :-
     write('Responda as seguintes perguntas: '), nl,
     pergunta_febre(RespostaF),  
     pergunta_tosse(RespostaT), 
-    pergunta_dores_no_corpo(RespostaDNC), 
+    pergunta_dor_no_corpo(RespostaDNC), 
     pergunta_dor_cabeca(RespostaDC),
     pergunta_dor_garganta(RespostaDG),  
     % pergunta_nariz_entupido(RespostaNE),    
@@ -111,6 +109,7 @@ questionario :-
     % pergunta_manchas_na_pele(RespostaManchas),
     % pergunta_respiracao_rapida(RespostaRespira),
     % pergunta_perda_de_peso(RespostaPeso),
+
     % amamos o vitor greff
     ListaRespostas = [RespostaF, RespostaT, RespostaDNC, RespostaDC, RespostaDG],
     % , RespostaNE, RespostaC, RespostaDP, RespostaCNP, RespostaFDA, RespostaDNA, RespostaTon, RespostaUrina, RespostaVNP, RespostaCoceira, RespostaVisao, RespostaFome, RespostaSede, RespostaManchas, RespostaRespira, RespostaPeso
@@ -129,12 +128,10 @@ questionario :-
     probabilidade_sintomas(hipertensao, ListaDeSintomas, ProbabilidadeHipertensao),
     Probs = [ProbabilidadeGripe, ProbabilidadeResfriado, ProbabilidadeCovid, ProbabilidadeAsma, ProbabilidadeBronquite, ProbabilidadePneumonia, ProbabilidadeDengue, ProbabilidadeZika, ProbabilidadeChikungunya, ProbabilidadeDiabetes, ProbabilidadeHipertensao],
     ordenado_decrescente(Probs, ProbsOrdenadas),
-    nth1(1, ProbsOrdenadas, DoencaMaiorProb),
-    nth1(2, ProbsOrdenadas, DoencaSegundaMaiorProb),
-    nth1(3, ProbsOrdenadas, DoencaTerceiraMaiorProb),
-    write('A doenca mais provavel e: '), write(DoencaMaiorProb), nl,
-    write('A segunda doenca mais provavel e: '), write(DoencaSegundaMaiorProb), nl,
-    write('A terceira doenca mais provavel e: '), write(DoencaTerceiraMaiorProb), nl,
-    imprime_doencas_ordenadas(ProbsOrdenadas, _, [gripe, resfriado, covid_19, asma, bronquite, pneumonia, dengue, zika, chikungunya, diabetes, hipertensao]).
-
-    %printar em ordem decrescente de probabilidade
+    % nth1(1, ProbsOrdenadas, DoencaMaiorProb),
+    % nth1(2, ProbsOrdenadas, DoencaSegundaMaiorProb),
+    % nth1(3, ProbsOrdenadas, DoencaTerceiraMaiorProb),
+    multiplica_lista(ProbsOrdenadas, 100,ProbTotal),
+    imprime_doencas_ordenadas(ProbTotal, _, [gripe, resfriado, covid_19, asma, bronquite, pneumonia, dengue, zika, chikungunya, diabetes, hipertensao]).
+    per
+    
