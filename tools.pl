@@ -139,16 +139,31 @@ subconjunto([X|Xs], Set) :-
     member(X, Set),
     subconjunto(Xs, Set).
 
-probabilidade_sintomas(Doenca,Sintomas, Probabilidade) :-
+
+multiplica_lista([], _, []).
+multiplica_lista([X|Xs], Valor, [Y|Ys]) :-
+    Y is X * Valor,
+    multiplica_lista(Xs, Valor, Ys).
+
+
+% probabilidade_sintomas(Doenca,Sintomas, Probabilidade) :-
+%     sintomas(Doenca, SintomasDoenca),
+%     probabilidade(Doenca, ProbabilidadeGlobal),
+%     length(SintomasDoenca, Total),
+%     length(Sintomas, Tamanho),
+%     Probabilidade is (Tamanho / Total)*ProbabilidadeGlobal.
+
+probabilidade_sintomas(Doenca, Sintomas, Probabilidade) :-
     sintomas(Doenca, SintomasDoenca),
     probabilidade(Doenca, ProbabilidadeGlobal),
+    intersection(Sintomas, SintomasDoenca, SintomasComuns),
+    length(SintomasComuns, Tamanho),
     length(SintomasDoenca, Total),
-    length(Sintomas, Tamanho),
-    Probabilidade is (Tamanho / Total)*ProbabilidadeGlobal.
+    Probabilidade is (Tamanho / Total) * ProbabilidadeGlobal.
 
 imprime_doencas_ordenadas([], _, _).
 imprime_doencas_ordenadas([ProbCabeca|Resto], ProbCabeca, [Cabeca|Doencas]) :-
-    format("~w - Probabilidade: ~w~n", [Cabeca, ProbCabeca]),
+    format('~w - Probabilidade: ~w%~n', [Cabeca, ProbCabeca]),
     imprime_doencas_ordenadas(Resto, _, Doencas).
 
 % Predicado de comparação

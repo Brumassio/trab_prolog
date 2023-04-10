@@ -19,8 +19,8 @@ grau_tosse(RespostaT) :-
     read(Resposta),
     (Resposta == sim -> RespostaT = tosse_com_catarro; RespostaT = tosse_sem_catarro).
 
-pergunta_dores_no_corpo(RespostaDNC) :-
-    write('\nEsta sentindo dores no corpo? (sim ou nao): '),
+pergunta_dor_no_corpo(RespostaDNC) :-
+    write('\nEsta sentindo dor no corpo? (sim ou nao): '),
     read(Resposta),
     (Resposta == sim -> RespostaDNC = dor_no_corpo; RespostaDNC = 0).
 
@@ -32,7 +32,7 @@ pergunta_dor_cabeca(RespostaDC) :-
 pergunta_dor_garganta(RespostaDG) :-
     write('\nEsta sentindo dor de garganta? (sim ou nao): '),
     read(Resposta),
-    (Resposta == sim -> RespostaDG = dor_de_garganta;RespostaDG = 0 ).
+    (Resposta == sim -> RespostaDG = dor_de_garganta; RespostaDG = 0 ).
 
 pergunta_nariz_entupido(RespostaNE) :-
     write('\nEsta com o nariz entupido? (sim ou nao): '),
