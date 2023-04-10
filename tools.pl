@@ -1,8 +1,5 @@
 :- consult('sintomas.pl').
 
-:- discontiguous probabilidades/2.
-:- discontiguous probabilidade_doenca/2.
-
 printa_lista(Lista) :-
     write('Sintomas do paciente: '), nl,
     write(Lista), nl.
@@ -106,53 +103,13 @@ editar_paciente_aux(Nome, Idade, NovoNome, NovaIdade, In, Out) :-
         editar_paciente_aux(Nome, Idade,NovoNome, NovaIdade, In, Out)
     ).
 
+% Deixa em porcentagem a probabilidade de cada doença
+multiplica_por_100([], []).
+multiplica_por_100([[Probabilidade, Doenca] | Resto], [[ProbabilidadeMultiplicada, Doenca] | ProbsMultiplicadas]) :-
+    ProbabilidadeMultiplicada is (Probabilidade * 100),
+    multiplica_por_100(Resto, ProbsMultiplicadas).
 
-% Funcao que calcula a probabilidade de uma doenca a partir de uma lista de sintomas
-probabilidade_doenca(Sintomas, Probabilidade) :-
-    % Verifica se a doenca tem os sintomas informados
-    sintomas(Doenca, ListaSintomas),
-    sublist(ListaSintomas, Sintomas),
-    % Retorna a probabilidade da doenca
-    probabilidade(Doenca, Probabilidade).
-
-% Funcao que verifica se uma lista eh uma sublista de outra lista
-sublist([], []).
-sublist(_, []).
-sublist(Sublist, [Head|Tail]) :-
-    prefix(Sublist, [Head|Tail]).
-sublist(Sublist, [_|Tail]) :-
-    sublist(Sublist, Tail).
-% Definir o predicado principal que recebe a lista de sintomas do paciente e retorna a probabilidade de cada doença
-probabilidade_doenca(Sintomas, Probabilidade) :-
-    findall(Prob, (sintomas(Doenca, SintomasDoenca), subconjunto(SintomasDoenca, Sintomas), probabilidade(Doenca, Prob)), Probabilidades),  
-    sumlist(Probabilidades, Probabilidade).
-
-checar_sintomas(Sintomas) :- % Sintomas = lista q o usuario respondeu SIM
-    probabilidades(Doenca, Probabilidade),
-    probabilidade_doenca(Sintomas, Doenca, Probabilidade),
-    write('Probabilidade de ter '), write(Doenca), write(': '), write(Probabilidade), nl,
-    fail.
-
-% Definir o predicado que verifica se uma lista eh um subconjunto de outra lista
-subconjunto([], _).
-subconjunto([X|Xs], Set) :-
-    member(X, Set),
-    subconjunto(Xs, Set).
-
-
-multiplica_lista([], _, []).
-multiplica_lista([X|Xs], Valor, [Y|Ys]) :-
-    Y is X * Valor,
-    multiplica_lista(Xs, Valor, Ys).
-
-
-% probabilidade_sintomas(Doenca,Sintomas, Probabilidade) :-
-%     sintomas(Doenca, SintomasDoenca),
-%     probabilidade(Doenca, ProbabilidadeGlobal),
-%     length(SintomasDoenca, Total),
-%     length(Sintomas, Tamanho),
-%     Probabilidade is (Tamanho / Total)*ProbabilidadeGlobal.
-
+% Calcula a probabilidade de cada doença e pega a lista com os Sintomas em Comum
 probabilidade_sintomas(Doenca, Sintomas, Probabilidade) :-
     sintomas(Doenca, SintomasDoenca),
     probabilidade(Doenca, ProbabilidadeGlobal),
@@ -161,15 +118,48 @@ probabilidade_sintomas(Doenca, Sintomas, Probabilidade) :-
     length(SintomasDoenca, Total),
     Probabilidade is (Tamanho / Total) * ProbabilidadeGlobal.
 
-imprime_doencas_ordenadas([], _, _).
-imprime_doencas_ordenadas([ProbCabeca|Resto], ProbCabeca, [Cabeca|Doencas]) :-
-    format('~w - Probabilidade: ~w%~n', [Cabeca, ProbCabeca]),
-    imprime_doencas_ordenadas(Resto, _, Doencas).
+% Imprime as probabilidades : doencça - probabilidade
+imprime_probs([]).
+imprime_probs([[Prob, Doenca] | Resto]) :-
+    format('~w - Probabilidade: ~w%~n', [Doenca, Prob]),
+    imprime_probs(Resto).
 
-% Predicado de comparação
-compara_decrescente(Comp, X, Y) :-
-    (X > Y -> Comp = (<) ; Comp = (>)).
+ordenar_por_probabilidade_decrescente(Lista, ListaOrdenada) :-
+    sort(1, @>=, Lista, ListaOrdenada).
 
-% Exemplo de uso
-ordenado_decrescente(Lista, Ordenada) :-
-    predsort(compara_decrescente, Lista, Ordenada).
+% Predicado principal que chama todos os outros relacionados a probabilidade
+main_probabilidade(ListaRespostas, ListaAux) :-
+    intersection(ListaRespostas,ListaAux, ListaDeSintomas), nl,
+    probabilidade_sintomas(gripe, ListaDeSintomas, ProbabilidadeGripe),
+    probabilidade_sintomas(resfriado, ListaDeSintomas, ProbabilidadeResfriado),
+    probabilidade_sintomas(covid_19,ListaDeSintomas,ProbabilidadeCovid),
+    probabilidade_sintomas(asma, ListaDeSintomas, ProbabilidadeAsma),
+    probabilidade_sintomas(bronquite, ListaDeSintomas, ProbabilidadeBronquite),
+    probabilidade_sintomas(pneumonia, ListaDeSintomas, ProbabilidadePneumonia),
+    probabilidade_sintomas(dengue, ListaDeSintomas, ProbabilidadeDengue),
+    probabilidade_sintomas(zika, ListaDeSintomas, ProbabilidadeZika),
+    probabilidade_sintomas(chikungunya, ListaDeSintomas, ProbabilidadeChikungunya),
+    probabilidade_sintomas(diabetes, ListaDeSintomas, ProbabilidadeDiabetes),
+    probabilidade_sintomas(hipertensao, ListaDeSintomas, ProbabilidadeHipertensao),
+    Probs = [[ProbabilidadeGripe,gripe], [ProbabilidadeResfriado, resfriado], [ProbabilidadeCovid, covid_19], [ProbabilidadeAsma, asma], [ProbabilidadeBronquite, bronquite], [ProbabilidadePneumonia, pneumonia], [ProbabilidadeDengue,dengue], [ProbabilidadeZika, zika], [ProbabilidadeChikungunya, chikungunya], [ProbabilidadeDiabetes, diabetes], [ProbabilidadeHipertensao, hipertensao]],
+    ordenar_por_probabilidade_decrescente(Probs, ProbsOrdenadas),
+    multiplica_por_100(ProbsOrdenadas,ProbFinal),
+    imprime_probs(ProbFinal),nl,
+    write('o resultado do prototipo eh apenas informativo e que o paciente deve consultar um medico para obter um diagnostico correto e preciso.'), nl,
+    solicitar_sintomas_nao_informados(ListaDeSintomas).
+
+% Define os sintomas que o paciente não informou
+solicitar_sintomas_nao_informados(ListaPaciente):-
+    write('Deseja mais informacoes sobre o diagnostico de alguma doenca ? (sim/nao)'), nl,
+    read(Resposta),
+    (   Resposta == sim
+    ->  write('Informe a doenca:'), nl,
+        read(Doenca),
+        sintomas(Doenca, SintomasDoenca),
+        intersection(ListaPaciente, SintomasDoenca, SintomasComuns),
+        write('\nSintomas que o paciente apresenta da doenca '), write(Doenca), write(': '), write(SintomasComuns), nl,
+        subtract(SintomasDoenca, SintomasComuns, SintomasNaoComuns),
+        write('\nSintomas que o paciente nao apresenta da doenca '), write(Doenca), write(': '), write(SintomasNaoComuns), nl,nl,
+        solicitar_sintomas_nao_informados(ListaPaciente)
+    ;  true
+    ).

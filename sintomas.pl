@@ -11,7 +11,7 @@ probabilidade(resfriado, 0.7).
 sintomas(covid_19, [febre_alta, tosse_sem_catarro, falta_de_ar, dor_de_cabeca]). % sintomas do covid_19
 probabilidade(covid_19, 0.9).
 
-sintomas(asma, [falta_de_ar, chiado_no_peito, tosse, respiracao_rapida]). % sintomas da asma
+sintomas(asma, [falta_de_ar, chiado_no_peito, tosse_sem_catarro, respiracao_rapida]). % sintomas da asma
 probabilidade(asma, 0.2). 
 
 sintomas(bronquite, [tosse_com_catarro, falta_de_ar, chiado_no_peito, dor_no_peito]). % sintomas da bronquite
@@ -33,4 +33,4 @@ sintomas(diabetes, [sede_excessiva, fome_excessiva, vontade_frequente_de_urinar,
 probabilidade(diabetes, 0.1). 
 
 sintomas(hipertensao, [dor_de_cabeca, tontura, visao_embasada, dor_no_peito]). % sintomas da hipertensao
-probabilidade(hipertensao, 0.15). 
+probabilidade(hipertensao, 0.5). 
