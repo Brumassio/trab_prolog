@@ -133,56 +133,28 @@ checar_sintomas(Sintomas) :- % Sintomas = lista q o usuario respondeu SIM
     write('Probabilidade de ter '), write(Doenca), write(': '), write(Probabilidade), nl,
     fail.
 
-% checar_sintomas(Paciente, Doenca) :-
-%     sintomas(Doenca, Sintomas),
-%     subset(Sintomas, Paciente).
-
 % Definir o predicado que verifica se uma lista eh um subconjunto de outra lista
 subconjunto([], _).
 subconjunto([X|Xs], Set) :-
     member(X, Set),
     subconjunto(Xs, Set).
 
-% probabilidade_doencas(SintomasUsuario, Probabilidades) :-
-% findall(Doenca-Sintomas, sintomas(Doenca, Sintomas), Doencas),
-% probabilidades_doencas(SintomasUsuario, Doencas, [], ProbabilidadesSemNormalizar),
-% sum_list(ProbabilidadesSemNormalizar, SomatorioProbabilidades),
-% maplist(dividir_pela_soma(SomatorioProbabilidades), ProbabilidadesSemNormalizar, Probabilidades).
+probabilidade_sintomas(Doenca,Sintomas, Probabilidade) :-
+    sintomas(Doenca, SintomasDoenca),
+    probabilidade(Doenca, ProbabilidadeGlobal),
+    length(SintomasDoenca, Total),
+    length(Sintomas, Tamanho),
+    Probabilidade is (Tamanho / Total)*ProbabilidadeGlobal.
 
-% probabilidades_doencas(_, [], Probabilidades, Probabilidades).
-% probabilidades_doencas(SintomasUsuario, [Doenca-Sintomas|RestoDoencas], ProbabilidadesAcumuladas, Probabilidades) :-
-%     tem_sintomas_em_comum(SintomasUsuario, Sintomas),
-%     probabilidades_doencas(SintomasUsuario, RestoDoencas, [Doenca-Probabilidade|ProbabilidadesAcumuladas], Probabilidades),
-%     probabilidade(Doenca, ProbabilidadeDoenca),
-%     Probabilidade is ProbabilidadeDoenca * multiplicar_probabilidades(SintomasUsuario, Sintomas).
+imprime_doencas_ordenadas([], _, _).
+imprime_doencas_ordenadas([ProbCabeca|Resto], ProbCabeca, [Cabeca|Doencas]) :-
+    format("~w - Probabilidade: ~w~n", [Cabeca, ProbCabeca]),
+    imprime_doencas_ordenadas(Resto, _, Doencas).
 
-% tem_sintomas_em_comum(SintomasUsuario, SintomasDoenca) :-
-%     intersection(SintomasUsuario, SintomasDoenca, SintomasEmComum),
-%     SintomasEmComum \= [].
+% Predicado de comparação
+compara_decrescente(Comp, X, Y) :-
+    (X > Y -> Comp = (<) ; Comp = (>)).
 
-% multiplicar_probabilidades(_, [], 1).
-% multiplicar_probabilidades(SintomasUsuario, [Sintoma|RestoSintomas], Probabilidade) :-
-%     multiplicar_probabilidades(SintomasUsuario, RestoSintomas, ProbabilidadeResto),
-%     probabilidade_sintoma(Sintoma, ProbabilidadeSintoma),
-%     (member(Sintoma, SintomasUsuario) -> Probabilidade is ProbabilidadeSintoma * ProbabilidadeResto ; Probabilidade is ProbabilidadeResto).
-
-% probabilidade_sintoma(Sintoma, Probabilidade) :-
-%     findall(Doenca, (sintomas(Doenca, SintomasDoenca), member(Sintoma, SintomasDoenca)), DoencasComSintoma),
-%     maplist(probabilidade, DoencasComSintoma, Probabilidades),
-%     sum_list(Probabilidades, Probabilidade).
-
-% regra para obter as probabilidades gerais
-probabilidades(Probs) :- findall(P, probabilidade(_,P), Probs).
-
-% regra para calcular a probabilidade de uma doença com base na lista de sintomas e na lista de probabilidades globais
-probabilidade_doenca(Sintomas, Probabilidade) :- 
-    sintomas(Doenca, SintomasD),
-    intersection(Sintomas, SintomasD, SintomasComuns),
-    length(SintomasComuns, Tamanho),
-    probabilidades(Probs),
-    nth0(Index, Probs, P),
-    length(SintomasD, Total),
-    Probabilidade is Tamanho / Total * P,
-    Index is Doenca-1.
-
-% dividir_pela_soma(Somatorio, Valor, Valor/Somatorio).
+% Exemplo de uso
+ordenado_decrescente(Lista, Ordenada) :-
+    predsort(compara_decrescente, Lista, Ordenada).
