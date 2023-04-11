@@ -1,5 +1,6 @@
-Cassio| 35
-Sherek| 50
-Douglas| 22
+Satub| 23
+Greffin| 20
 Biscaia| 22
-Brumas| 21
+Molininha| 21
+Beluolov| 22
+Arthurzin| 21

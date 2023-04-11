@@ -8,6 +8,7 @@
 % Diciplina: 
 % Paradigmas de Programação Lógica e Funcional 
 % 2 Trabalho Prático
+
 :- consult('perguntas.pl').
 :- consult('tools.pl').
 :- consult('sintomas.pl').
@@ -39,10 +40,11 @@ menu :-
     Opcao =:= 6, !.
 
 opcao_menu(1) :-
-    write('Listando pacientes: \n'),
+    write('\nListando pacientes: \n'),
     ler_arquivo_pacientes('pacientes.txt').
     
 opcao_menu(2) :-
+    write('Cadastrando !!!'), nl,
     input_do_paciente(Nome, Idade),
     adicionar_paciente(Nome,Idade).
     
@@ -57,6 +59,7 @@ opcao_menu(3) :-
     write('Paciente editado com sucesso!'), nl.
     
 opcao_menu(4) :-
+    write('Excluindo !!!'), nl,
     input_do_paciente(Nome, Idade),
     excluir_paciente(Nome, Idade),
     write('Paciente excluido com sucesso!'), nl.

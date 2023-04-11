@@ -24,7 +24,7 @@ processar_linha(Line) :-
 ascii_para_string(Codes, String) :-
     atom_codes(String, Codes).
 
-    % cadastrar paciente no arquivo .txt
+% cadastrar paciente no arquivo .txt
 input_do_paciente(Nome, Idade) :-
     write('Digite o nome do paciente: '),
     read(Nome),
@@ -86,12 +86,10 @@ editar_paciente_aux(Nome, Idade, NovoNome, NovaIdade, In, Out) :-
     ;   atom_codes(NomeIdade, Line),
         atomic_list_concat([NomeA, IdadeA], '| ', NomeIdade),
         atom_number(IdadeA, IdadeA2),
-        write('TO AQUI !!!'), nl,
         (   
             NomeA == Nome,
             IdadeA2 == Idade
         ->  
-            write('To escrevendo aqui po'), nl,
             write(Out, NovoNome), 
             write(Out, '| '),
             write(Out, NovaIdade), 
@@ -141,7 +139,9 @@ main_probabilidade(ListaRespostas, ListaAux) :-
     probabilidade_sintomas(chikungunya, ListaDeSintomas, ProbabilidadeChikungunya),
     probabilidade_sintomas(diabetes, ListaDeSintomas, ProbabilidadeDiabetes),
     probabilidade_sintomas(hipertensao, ListaDeSintomas, ProbabilidadeHipertensao),
-    Probs = [[ProbabilidadeGripe,gripe], [ProbabilidadeResfriado, resfriado], [ProbabilidadeCovid, covid_19], [ProbabilidadeAsma, asma], [ProbabilidadeBronquite, bronquite], [ProbabilidadePneumonia, pneumonia], [ProbabilidadeDengue,dengue], [ProbabilidadeZika, zika], [ProbabilidadeChikungunya, chikungunya], [ProbabilidadeDiabetes, diabetes], [ProbabilidadeHipertensao, hipertensao]],
+    Probs = [[ProbabilidadeGripe,gripe], [ProbabilidadeResfriado, resfriado], [ProbabilidadeCovid, covid_19], [ProbabilidadeAsma, asma], [ProbabilidadeBronquite, bronquite], 
+    [ProbabilidadePneumonia, pneumonia], [ProbabilidadeDengue,dengue], [ProbabilidadeZika, zika], [ProbabilidadeChikungunya, chikungunya], [ProbabilidadeDiabetes, diabetes],
+    [ProbabilidadeHipertensao, hipertensao]],
     ordenar_por_probabilidade_decrescente(Probs, ProbsOrdenadas),
     multiplica_por_100(ProbsOrdenadas,ProbFinal),
     imprime_probs(ProbFinal),nl,

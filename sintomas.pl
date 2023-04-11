@@ -33,4 +33,4 @@ sintomas(diabetes, [sede_excessiva, fome_excessiva, vontade_frequente_de_urinar,
 probabilidade(diabetes, 0.1). 
 
 sintomas(hipertensao, [dor_de_cabeca, tontura, visao_embasada, dor_no_peito]). % sintomas da hipertensao
-probabilidade(hipertensao, 0.5). 
+probabilidade(hipertensao, 0.35). 
